@@ -21,3 +21,5 @@ func NewCollections(mongo *mongo.Database, collection string) *db {
 		collection: mongo.Collection(collection),
 	}
 }
+
+//
