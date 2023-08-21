@@ -1,12 +1,26 @@
 package delivery
 
-type HandlerInterface interface{}
+import (
+	"task/internal/service"
 
-type Handler struct{}
+	"github.com/gin-gonic/gin"
+)
 
-// type NewHandler() {}
+type HandlerInterface interface {
+	Routes(router *gin.Engine)
+}
 
-// type (h *Handler) Routes(router *gin.Context) {
-// 	router.GET("/sign-in/:guid", h.GenerateToken)
-// 	router.GET("/refresh/:guid", h.Refresh)
-// }
+type Handler struct {
+	service service.AuthService
+}
+
+func NewHandlers(auth service.AuthService) HandlerInterface {
+	return &Handler{
+		service: auth,
+	}
+}
+
+func (h *Handler) Routes(router *gin.Engine) {
+	router.GET("/sign-in/:guid", h.GenerateToken)
+	router.GET("/refresh/:guid", h.Refresh)
+}

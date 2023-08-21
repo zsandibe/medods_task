@@ -13,7 +13,7 @@ type service struct {
 
 type AuthService interface {
 	CreateToken(userGUID string) (*repository.Jwt, error)
-	RefreshToken(tokens *repository.Jwt) (*repository.Jwt, error)
+	UpdateToken(tokens *repository.Jwt) (*repository.Jwt, error)
 }
 
 type AuthClaims struct {
@@ -21,8 +21,8 @@ type AuthClaims struct {
 	User *repository.UserToken
 }
 
-// func NewService(storage migration.Storage) AuthService {
-// 	return &service{
-// 		storage: storage,
-// 	}
-// }
+func NewService(storage migration.Storage) AuthService {
+	return &service{
+		storage: storage,
+	}
+}
