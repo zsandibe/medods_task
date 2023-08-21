@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/joho/godotenv"
 )
@@ -16,13 +17,13 @@ type Config struct {
 }
 
 func Configuration() Config {
-	err := godotenv.Load(".env")
+	err := godotenv.Load(filepath.Join(".", ".env"))
 	if err != nil {
 		fmt.Printf("Error loading .env file : %v\n", err)
 	}
 	return Config{
 		MongoURL:       os.Getenv("MONGODB_URL"),
-		NameDB:         os.Getenv("MONGODB_NAME"),
+		NameDB:         os.Getenv("NAME_DB"),
 		NameCollection: os.Getenv("NAME_COLLECTION"),
 		AccessKey:      os.Getenv("ACCESS_KEY"),
 	}
