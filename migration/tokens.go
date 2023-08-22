@@ -28,38 +28,38 @@ func (db *Db) Create(userToken *repository.UserToken) error {
 
 func (db *Db) Get(userGUID string, bindTokens string) (*repository.UserToken, error) {
 	filter := bson.M{
-		"userGUID":   userGUID,
-		"bindTokens": bindTokens,
+		"user_guid":   userGUID,
+		"bind_tokens": bindTokens,
 	}
-
+	fmt.Println(filter)
 	mongoRes := db.collection.FindOne(context.Background(), filter)
-
+	fmt.Println(mongoRes.Err())
 	if mongoRes.Err() != nil {
 		log.Printf("error in getting: %v\n", mongoRes.Err())
 		return nil, mongoRes.Err()
 	}
 
-	var userTokens repository.UserToken
+	userTokens := &repository.UserToken{}
 
 	if err := mongoRes.Decode(&userTokens); err != nil {
 		log.Printf("error in decoding: %v\n", err)
 		return nil, err
 	}
-	return &userTokens, nil
+	return userTokens, nil
 }
 
 func (db *Db) Update(old *repository.UserToken, new *repository.UserToken) error {
 	filter := bson.M{
-		"refreshToken": bson.M{"$eq": old.RefreshToken},
-		"bindTokens":   bson.M{"$eg": old.BindTokens},
-		"userGUID":     bson.M{"$eq": old.UserGUID},
+		"refresh_token": bson.M{"$eq": old.RefreshToken},
+		"bind_tokens":   bson.M{"$eg": old.BindTokens},
+		"user_guid":     bson.M{"$eq": old.UserGUID},
 	}
 
 	update := bson.M{
 		"$set": bson.M{
-			"userGUID":     new.UserGUID,
-			"bindTokens":   new.BindTokens,
-			"refreshToken": new.RefreshToken,
+			"user_guid":     new.UserGUID,
+			"bind_tokens":   new.BindTokens,
+			"refresh_token": new.RefreshToken,
 		},
 	}
 	mongoRes, err := db.collection.UpdateOne(context.Background(), filter, update)

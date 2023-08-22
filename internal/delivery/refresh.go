@@ -8,8 +8,12 @@ import (
 )
 
 func (h *Handler) Refresh(c *gin.Context) {
+	// fmt.Println("OK")
 	userGuid := c.Param("guid")
+	// fmt.Println(userGuid)
 	refreshToken, err := c.Request.Cookie("refresh-token")
+	// fmt.Println(refreshToken)
+	// fmt.Println(err)
 	if err != nil {
 		log.Printf("Can`t find refresh token : %v\n", err)
 		c.AbortWithStatusJSON(401, gin.H{"error": "Invalid api token"})

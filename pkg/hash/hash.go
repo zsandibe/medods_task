@@ -15,8 +15,8 @@ func Generate(token string) (string, error) {
 	return string(bytes), nil
 }
 
-func Compare(token string, hashTokent string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hashTokent), []byte(token))
+func Compare(token string, hashToken string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hashToken), []byte(token))
 	if err != nil {
 		return false
 	}

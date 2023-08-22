@@ -21,6 +21,6 @@ func NewHandlers(auth service.AuthService) HandlerInterface {
 }
 
 func (h *Handler) Routes(router *gin.Engine) {
-	router.GET("/sign-in/:guid", h.GenerateToken)
+	router.GET("/login/:guid", h.GenerateToken)
 	router.GET("/refresh/:guid", h.Refresh)
 }

@@ -2,6 +2,7 @@ package service
 
 import (
 	"encoding/base64"
+	"fmt"
 	"log"
 	"os"
 	"task/internal/repository"
@@ -14,7 +15,7 @@ import (
 
 func (s *service) CreateAccessToken(userGUID string) (string, error) {
 	accessTokenClaims := &jwt.StandardClaims{
-		ExpiresAt: time.Now().Add(time.Hour * 24 * 30).Unix(),
+		ExpiresAt: time.Now().Add(time.Hour * 1).Unix(),
 		Id:        userGUID,
 		IssuedAt:  time.Now().Add(time.Second * 5).Unix(),
 		Subject:   "user",
@@ -28,10 +29,10 @@ func (s *service) CreateAccessToken(userGUID string) (string, error) {
 	return token, nil
 }
 
-func (s *service) CreateRefreshToken() (string, error) {
+func (s *service) CreateRefreshToken() string {
 	refreshToken := uuid.New()
 	encodedRefreshToken := base64.StdEncoding.EncodeToString([]byte(refreshToken.String()))
-	return encodedRefreshToken, nil
+	return encodedRefreshToken
 }
 
 func (s *service) CreatePair(userGUID string) (*repository.Jwt, *repository.UserToken, error) {
@@ -40,11 +41,7 @@ func (s *service) CreatePair(userGUID string) (*repository.Jwt, *repository.User
 		log.Println("error creating access token : %v\n", err)
 		return nil, nil, err
 	}
-	refreshToken, err := s.CreateRefreshToken()
-	if err != nil {
-		log.Println("error creating refresh token : %v\n", err)
-		return nil, nil, err
-	}
+	refreshToken := s.CreateRefreshToken()
 	hashedRefreshToken, err := hash.Generate(refreshToken)
 	if err != nil {
 		log.Println("error generating refresh token : %v\n", err)
@@ -69,10 +66,12 @@ func (s *service) CreatePair(userGUID string) (*repository.Jwt, *repository.User
 
 func (s *service) CreateToken(userGUID string) (*repository.Jwt, error) {
 	tokensClient, tokensDB, err := s.CreatePair(userGUID)
+	// fmt.Println("tC", tokensClient, "\n", "tDB", tokensDB)
 	if err != nil {
 		log.Println("error creating pair : %v\n", err)
 		return nil, err
 	}
 	s.storage.Create(tokensDB)
+	fmt.Println(tokensClient)
 	return tokensClient, nil
 }

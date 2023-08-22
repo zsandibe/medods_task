@@ -14,5 +14,6 @@ func (h *Handler) GenerateToken(c *gin.Context) {
 		c.AbortWithStatusJSON(401, nil)
 		return
 	}
+	// fmt.Println(token)
 	h.SetCookie(c, token)
 }

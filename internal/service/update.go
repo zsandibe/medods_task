@@ -16,14 +16,14 @@ func (s *service) UpdateToken(tokens *repository.Jwt) (*repository.Jwt, error) {
 	}
 
 	bindTokens := tokens.AccessToken[len(tokens.AccessToken)-6:]
-
+	// fmt.Println(bindTokens)
 	oldRefreshToken, err := s.storage.Get(tokens.UserGUID, bindTokens)
 	if err != nil {
 		log.Printf("Didn't find the second pair of token: %v\n", err)
 		return nil, err
 	}
 
-	isValidRefreshToken := hash.Compare(oldRefreshToken.RefreshToken, tokens.RefreshToken)
+	isValidRefreshToken := hash.Compare(tokens.RefreshToken, oldRefreshToken.RefreshToken)
 
 	if !isValidRefreshToken {
 		log.Println("Invalid refresh token")
