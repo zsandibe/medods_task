@@ -2,7 +2,6 @@ package service
 
 import (
 	"encoding/base64"
-	"fmt"
 	"log"
 	"os"
 	"task/internal/repository"
@@ -72,6 +71,6 @@ func (s *service) CreateToken(userGUID string) (*repository.Jwt, error) {
 		return nil, err
 	}
 	s.storage.Create(tokensDB)
-	fmt.Println(tokensClient)
+	// fmt.Println(tokensClient)
 	return tokensClient, nil
 }

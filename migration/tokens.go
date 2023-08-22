@@ -31,9 +31,9 @@ func (db *Db) Get(userGUID string, bindTokens string) (*repository.UserToken, er
 		"user_guid":   userGUID,
 		"bind_tokens": bindTokens,
 	}
-	fmt.Println(filter)
+	// fmt.Println(filter)
 	mongoRes := db.collection.FindOne(context.Background(), filter)
-	fmt.Println(mongoRes.Err())
+	// fmt.Println(mongoRes.Err())
 	if mongoRes.Err() != nil {
 		log.Printf("error in getting: %v\n", mongoRes.Err())
 		return nil, mongoRes.Err()

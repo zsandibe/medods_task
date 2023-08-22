@@ -16,4 +16,5 @@ func (h *Handler) GenerateToken(c *gin.Context) {
 	}
 	// fmt.Println(token)
 	h.SetCookie(c, token)
+	c.JSON(200, token)
 }

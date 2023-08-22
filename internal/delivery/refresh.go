@@ -40,4 +40,5 @@ func (h *Handler) Refresh(c *gin.Context) {
 		return
 	}
 	h.SetCookie(c, tokens)
+	c.JSON(200, tokens)
 }
